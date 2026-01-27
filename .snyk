@@ -1,0 +1,15 @@
+# Snyk (https://snyk.io) policy file
+version: v1.25.0
+ignore:
+  'SNYK-JS-INFLIGHT-6095116':
+    - '*':
+        reason: 'No upgrade or patch available for this dependency of react-scripts'
+        expires: '2026-02-27T00:00:00.000Z'
+  'SNYK-JS-POSTCSS-5926692':
+    - '*':
+        reason: 'Internal dependency of react-scripts, risk is minimal in frontend'
+        expires: '2026-02-27T00:00:00.000Z'
+  'SNYK-JS-SERIALIZEJAVASCRIPT-6147607':
+    - '*':
+        reason: 'Dependency of workbox through react-scripts'
+        expires: '2026-02-27T00:00:00.000Z'
