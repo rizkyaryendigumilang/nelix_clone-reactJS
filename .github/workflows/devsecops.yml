@@ -25,20 +25,15 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # Menjalankan Snyk untuk cek lodash & react-scripts
+      # Menjalankan Snyk Scan
       - name: Run Snyk Scan
         uses: snyk/actions/node@master
         env:
-          # Contoh pengisian menggunakan secret (Wajib diisi di GitHub Settings)
-          SNYK_TOKEN: ${{ a52b7da1-9a24-4a13-8b69-e917aaa57c5f}} 
-          # Nilai aslinya yang kamu kirim: a52b7da1-9a24-4a13-8b69-e917aaa57c5f
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # Menjalankan SonarQube untuk cek Math.random() di App.js
+      # Menjalankan SonarCloud Scan
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          
-          GITHUB_TOKEN: ${{ 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 }}
-          # Nilai aslinya yang kamu kirim: github_pat_11AW752AI0D6...
-          
-          SONAR_TOKEN: ${{ d995d7f49d33820ebfcdf8e4be0b0a3cac106439 }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
