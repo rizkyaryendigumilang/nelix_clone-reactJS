@@ -1,0 +1,44 @@
+name: DevSecOps-Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  security_scan:
+    name: Snyk and Sonar Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      # Menjalankan Snyk untuk cek lodash & react-scripts
+      - name: Run Snyk Scan
+        uses: snyk/actions/node@master
+        env:
+          # Contoh pengisian menggunakan secret (Wajib diisi di GitHub Settings)
+          SNYK_TOKEN: ${{ a52b7da1-9a24-4a13-8b69-e917aaa57c5f}} 
+          # Nilai aslinya yang kamu kirim: a52b7da1-9a24-4a13-8b69-e917aaa57c5f
+
+      # Menjalankan SonarQube untuk cek Math.random() di App.js
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          
+          GITHUB_TOKEN: ${{ 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 }}
+          # Nilai aslinya yang kamu kirim: github_pat_11AW752AI0D6...
+          
+          SONAR_TOKEN: ${{ d995d7f49d33820ebfcdf8e4be0b0a3cac106439 }}
