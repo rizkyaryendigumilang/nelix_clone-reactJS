@@ -13,25 +13,25 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Penting untuk SonarCloud agar bisa membaca riwayat git
+          fetch-depth: 0 # Wajib agar SonarCloud bisa membaca riwayat branch
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm' # Mempercepat proses install dengan cache
+          cache: 'npm' # Mempercepat proses agar tidak sampai 9 menit
 
       - name: Install Dependencies
-        run: npm install # Menerapkan 'overrides' dari package.json Anda
+        run: npm install
 
-      # 1. Snyk Scan
+      # Menjalankan Snyk (tetap gunakan continue-on-error agar tidak menghambat Sonar)
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
-        continue-on-error: true # Agar pipeline tidak berhenti jika ada isu yang di-ignore file .snyk
+        continue-on-error: true
         env:
-          SNYK_TOKEN: ${{ secrets.SNAR_TOKEN }} # Pastikan nama secret ini benar di GitHub Settings
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # 2. SonarCloud Scan (Versi Terbaru)
+      # Perbaikan utama untuk Exit Code 3
       - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
@@ -41,3 +41,5 @@ jobs:
           args: >
             -Dsonar.organization=Kiky
             -Dsonar.projectKey=Kiky_nelix_clone-reactJS
+            -Dsonar.sources=src
+            -Dsonar.branch.name=main
