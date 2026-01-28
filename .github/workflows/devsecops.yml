@@ -14,31 +14,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-<<<<<<< HEAD
-          fetch-depth: 0 # Wajib agar SonarCloud bisa membaca riwayat branch
-=======
           fetch-depth: 0 # Penting agar Sonar bisa membaca histori git
->>>>>>> 00873c9 (Fix: Explicitly set main branch for SonarCloud)
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-<<<<<<< HEAD
-          cache: 'npm' # Mempercepat proses agar tidak sampai 9 menit
-
-      - name: Install Dependencies
-        run: npm install
-
-      # Menjalankan Snyk (tetap gunakan continue-on-error agar tidak menghambat Sonar)
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-      # Perbaikan utama untuk Exit Code 3
-=======
           cache: 'npm' # Mempercepat build dengan cache npm
 
       - name: Install Dependencies
@@ -50,7 +31,6 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
->>>>>>> 00873c9 (Fix: Explicitly set main branch for SonarCloud)
       - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@master # Versi terbaru sesuai saran log
         env:
@@ -60,11 +40,6 @@ jobs:
           args: >
             -Dsonar.organization=Kiky
             -Dsonar.projectKey=Kiky_nelix_clone-reactJS
-<<<<<<< HEAD
-            -Dsonar.sources=src
-            -Dsonar.branch.name=main
-=======
             -Dsonar.branch.name=main
             -Dsonar.sources=src
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
->>>>>>> 00873c9 (Fix: Explicitly set main branch for SonarCloud)
