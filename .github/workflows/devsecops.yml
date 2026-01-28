@@ -45,6 +45,6 @@ jobs:
         with:
           args: >
             -Dsonar.organization=SONAR_ORG_USERNAME
-            -Dsonar.projectKey=nelix_clone-reactJS
+            -Dsonar.projectKey=rizkyaryendigumilang_nelix_clone-reactJS
             -Dsonar.branch.name=main
             -Dsonar.sources=src
