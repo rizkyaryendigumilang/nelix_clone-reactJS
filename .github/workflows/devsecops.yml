@@ -8,11 +8,11 @@ on:
 
 jobs:
   analysis:
-    name: Snyk + SonarCloud Analysis
+    name: Snyk and SonarCloud Analysis
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout source
+      # 1. Checkout source (WAJIB fetch-depth 0)
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
@@ -29,23 +29,22 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # 4. Run Snyk
-      - name: Run Snyk Scan
-        uses: snyk/actions/node@v2.0.1
+      # 4. Snyk scan (tidak menggagalkan pipeline)
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # 5. Run SonarCloud (Free Plan)
+      # 5. SonarCloud Scan (FREE PLAN)
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_SCANNER_OPTS: "-X"   # optional debug
         with:
-          args: |
-            -Dsonar.organization=YOUR_ORG_KEY
-            -Dsonar.projectKey=YOUR_PROJECT_KEY
+          args: >
+            -Dsonar.organization=SONAR_ORG_USERNAME
+            -Dsonar.projectKey=nelix_clone-reactJS
             -Dsonar.branch.name=main
             -Dsonar.sources=src
