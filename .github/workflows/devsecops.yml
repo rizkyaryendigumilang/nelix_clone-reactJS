@@ -2,41 +2,44 @@ name: DevSecOps Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   analysis:
     name: Snyk and Sonar Analysis
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
+          cache: npm
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Snyk
+      - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: SonarCloud Scan
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
             -Dsonar.organization=Kiky
-            -Dsonar.projectKey=Kiky_nelix_clone-reactJS
-            -Dsonar.sources=src
+            -Dsonar.projectKey=nelix_clone-reactJS
             -Dsonar.branch.name=main
+            -Dsonar.sources=src
