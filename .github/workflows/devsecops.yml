@@ -1,4 +1,4 @@
-name: Snyk and Sonar Analysis
+name: DevSecOps Pipeline
 
 on:
   push:
@@ -8,17 +8,23 @@ on:
 
 jobs:
   analysis:
+    name: Snyk and Sonar Analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
+<<<<<<< HEAD
           fetch-depth: 0 # Wajib agar SonarCloud bisa membaca riwayat branch
+=======
+          fetch-depth: 0 # Penting agar Sonar bisa membaca histori git
+>>>>>>> 00873c9 (Fix: Explicitly set main branch for SonarCloud)
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
+<<<<<<< HEAD
           cache: 'npm' # Mempercepat proses agar tidak sampai 9 menit
 
       - name: Install Dependencies
@@ -32,8 +38,21 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       # Perbaikan utama untuk Exit Code 3
+=======
+          cache: 'npm' # Mempercepat build dengan cache npm
+
+      - name: Install Dependencies
+        run: npm install # Menerapkan 'overrides' keamanan dari package.json Anda
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        continue-on-error: true # Melanjutkan ke Sonar meski ada isu yang di-ignore di .snyk
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+>>>>>>> 00873c9 (Fix: Explicitly set main branch for SonarCloud)
       - name: SonarCloud Scan
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: sonarsource/sonarqube-scan-action@master # Versi terbaru sesuai saran log
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -41,5 +60,11 @@ jobs:
           args: >
             -Dsonar.organization=Kiky
             -Dsonar.projectKey=Kiky_nelix_clone-reactJS
+<<<<<<< HEAD
             -Dsonar.sources=src
             -Dsonar.branch.name=main
+=======
+            -Dsonar.branch.name=main
+            -Dsonar.sources=src
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+>>>>>>> 00873c9 (Fix: Explicitly set main branch for SonarCloud)
