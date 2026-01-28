@@ -3,8 +3,6 @@ name: DevSecOps Pipeline
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   analysis:
@@ -14,25 +12,25 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Penting agar Sonar bisa membaca histori git untuk binding branch
+          fetch-depth: 0 
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm' # Mempercepat build dengan cache npm
+          cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install # Menjalankan instalasi bersih sesuai package.json
+        run: npm install
 
-      - name: Run Snyk to check for vulnerabilities
+      - name: Run Snyk
         uses: snyk/actions/node@master
-        continue-on-error: true # Melanjutkan ke Sonar meski ada isu yang di-ignore di .snyk
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: SonarCloud Scan
-        uses: sonarsource/sonarqube-scan-action@master # Menggunakan versi terbaru agar tidak deprecated
+        uses: sonarsource/sonarqube-scan-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -40,7 +38,5 @@ jobs:
           args: >
             -Dsonar.organization=Kiky
             -Dsonar.projectKey=Kiky_nelix_clone-reactJS
-            -Dsonar.branch.name=main
             -Dsonar.sources=src
-            -Dsonar.scm.provider=git
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.branch.name=main
