@@ -39,7 +39,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=Kiky
             -Dsonar.projectKey=nelix_clone-reactJS
             -Dsonar.branch.name=main
             -Dsonar.sources=src
